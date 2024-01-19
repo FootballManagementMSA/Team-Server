@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Getter
-@Entity
+@Entity(name = "team_tb")
 public class Team extends BaseTimeEntity {
     @Id
     @GeneratedValue
