@@ -1,16 +1,13 @@
 package sejong.team.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sejong.team.common.client.UserServiceClient;
-import sejong.team.common.client.dto.SizeOfUsersInTeamResponse;
+import sejong.team.common.client.dto.SizeUserTeamResponse;
 import sejong.team.domain.Team;
 import sejong.team.repository.TeamRepository;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
-import sejong.team.service.req.SearchTeamInfoRequestDto;
-import sejong.team.service.res.SearchTeamInfoResponseDto;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -20,12 +17,12 @@ public class TeamService {
     public TeamBaseInfoResponseDto findTeamInfo(Long teamId) {
         Team findTeam = teamRepository.findById(teamId)
                 .orElseThrow(NullPointerException::new);
-        SizeOfUsersInTeamResponse sizeOfUsersInTeam = userServiceClient.getSizeOfUsersInTeam(teamId);
+        ResponseEntity<SizeUserTeamResponse> sizeUserTeamResponseResponseEntity = userServiceClient.countUsersInTeam(teamId);
         return TeamBaseInfoResponseDto.builder()
                 .teamName(findTeam.getName())
                 .teamEmblem(findTeam.getEmblem())
                 .unique_num(findTeam.getUnique_num())
-                .sizeOfUsers(sizeOfUsersInTeam.getSize())
+                .sizeOfUsers(sizeUserTeamResponseResponseEntity.getBody().getSize())
                 .createdAt(findTeam.getCreated_at())
                 .build();
 

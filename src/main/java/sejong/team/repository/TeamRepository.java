@@ -16,6 +16,6 @@ import java.util.function.Function;
 public interface TeamRepository extends JpaRepository<Team,Long> {
     Optional<Team> findById(Long teamId);
 
-    @Query("select t from Team as t where t.unique_num=:conditions or t.name=:conditions")
+    @Query("select t from team_tb as t where t.unique_num=:conditions or t.name=:conditions")
     List<Team> findAllByCondition(@Param(value = "conditions") String conditions);
 }
