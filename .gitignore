@@ -7,7 +7,6 @@ build/
 **/main/resources/application.yml
 **/main/resources/application-local.yml
 **/main/resources/application-production.yml
-**/test/resources/application.yml
 
 src/test/resources/application.yml
 src/test/resources/application-local.yml

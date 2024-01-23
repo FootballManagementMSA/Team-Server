@@ -52,4 +52,18 @@ public class TeamServiceTest {
                 any(InputStream.class), any(ObjectMetadata.class));
         verify(teamRepository, times(1)).save(any(Team.class));
     }
+    @Test
+    void 팀검색_기능테스트_이름() {
+        //given
+        Team saveTeam = teamRepository.save(createTeam());
+        //when
+        //then
+    }
+    private static Team createTeam() {
+        return Team.builder()
+                .uniqueNum("test_unique_num")
+                .emblem("test_emblem")
+                .name("test_name")
+                .build();
+    }
 }
