@@ -57,4 +57,12 @@ public class TeamService {
                 .createdAt(findTeam.getCreated_at())
                 .build();
     }
+    /*
+    public List<SearchTeamInfoResponseDto> searchTeamInfoByNameOrCode(SearchTeamInfoRequestDto requestDto) {
+        List<Team> allTeamByCond = teamRepository.findAllByCondition(requestDto.getSearchCond());
+        allTeamByCond.stream()
+        allTeamByCond.stream().map(team -> SearchTeamInfoResponseDto.of(
+            team.getId(),team.getName(),team.getEmblem(),,team.getUnique_num()
+        ))
+    }*/
 }
