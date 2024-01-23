@@ -9,6 +9,10 @@ build/
 **/main/resources/application-production.yml
 **/test/resources/application.yml
 
+src/test/resources/application.yml
+src/test/resources/application-local.yml
+src/test/resources/application-production.yml
+
 ### STS ###
 .apt_generated
 .classpath
@@ -39,3 +43,4 @@ out/
 
 ### VS Code ###
 .vscode/
+src/main/resources/application.yml

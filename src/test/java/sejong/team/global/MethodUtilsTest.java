@@ -16,10 +16,10 @@ public class MethodUtilsTest {
     public void getInputStreamFromMultipartFileTest() throws IOException {
         // given
         MultipartFile mockMultipartFile = new MockMultipartFile(
-                "file",
-                "filename.txt",
-                "text/plain",
-                "some xml".getBytes());
+                "emblem",
+                "emblem.jpg",
+                "image/plain",
+                "emblem_images".getBytes());
 
         // when
         InputStream inputStream = MethodUtils.getInputStreamFromMultipartFile(mockMultipartFile);
