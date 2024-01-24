@@ -5,6 +5,9 @@ import lombok.Getter;
 @Getter
 public class DataResponse<T> extends BaseResponse{
     private T data;
+    public DataResponse() {
+        super();
+    }
 
     public DataResponse(T data) {
         super();

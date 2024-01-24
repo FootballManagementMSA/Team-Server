@@ -12,6 +12,7 @@ import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
 import sejong.team.global.MethodUtils;
 import sejong.team.repository.TeamRepository;
+import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
 import java.io.IOException;
@@ -25,24 +26,22 @@ public class TeamService {
     private final S3Service s3Service;
     private final UserServiceClient userServiceClient;
     @Transactional
-    public void createTeam(TeamDto teamDto) throws IOException {
-        InputStream inputStream = MethodUtils.getInputStreamFromMultipartFile(teamDto.getEmblem());
-        String fileName = UUID.randomUUID().toString() + ".jpg";
-
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength(teamDto.getEmblem().getSize());
-        metadata.setContentType(teamDto.getEmblem().getContentType());
-        s3Service.uploadFile(fileName, inputStream, metadata);
+    public CreateTeamResponseVO createTeam(TeamDto teamDto) throws IOException {
+        String fileUrl = s3Service.uploadMultipartFile(teamDto.getEmblem());
 
         // 중복 로직 반영 x
         String uniqueNum = UUID.randomUUID().toString().substring(0, 4);
 
         Team team = Team.builder()
                 .name(teamDto.getName())
-                .emblem(s3Service.getFileUrl(fileName))
+                .emblem(fileUrl)
                 .uniqueNum(uniqueNum)
                 .build();
         teamRepository.save(team);
+
+        return CreateTeamResponseVO.builder()
+                .uniqueNumber(uniqueNum)
+                .build();
     }
 
     public TeamBaseInfoResponseDto findTeamInfo(Long teamId) {

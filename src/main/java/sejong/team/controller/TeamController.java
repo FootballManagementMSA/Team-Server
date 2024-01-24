@@ -6,6 +6,7 @@ import sejong.team.dto.TeamDto;
 import sejong.team.global.BaseResponse;
 import sejong.team.global.DataResponse;
 import sejong.team.service.TeamService;
+import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
 import java.io.IOException;
@@ -20,10 +21,8 @@ public class TeamController {
         return new DataResponse<>(teamService.findTeamInfo(teamId));
     }
     @PostMapping("/teams")
-    public BaseResponse createTeam(@ModelAttribute TeamDto teamDto) throws IOException {
-        teamService.createTeam(teamDto);
-        return new BaseResponse();
+    public DataResponse<CreateTeamResponseVO> createTeam(@ModelAttribute TeamDto teamDto) throws IOException {
+        return new DataResponse<>(teamService.createTeam(teamDto));
     }
-
 
 }
