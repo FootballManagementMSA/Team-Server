@@ -22,14 +22,14 @@ class TeamRepositoryTest {
         Team saveTeam = teamRepository.save(team);
         //when
         //then
-        assertAll(()->assertEquals(team.getUnique_num(),saveTeam.getUnique_num()),
+        assertAll(()->assertEquals(team.getUniqueNum(),saveTeam.getUniqueNum()),
                 ()->assertEquals(team.getName(),saveTeam.getName()),
                 ()->assertEquals(team.getEmblem(),saveTeam.getEmblem()));
     }
 
     private static Team createTeam() {
         return Team.builder()
-                .unique_num("test_unique_num")
+                .uniqueNum("test_unique_num")
                 .emblem("test_emblem")
                 .name("test_name")
                 .build();

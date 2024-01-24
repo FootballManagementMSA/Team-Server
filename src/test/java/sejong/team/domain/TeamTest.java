@@ -23,14 +23,14 @@ class TeamTest {
         String emblem = "emblem_test";
         Team team = Team.builder()
                 .emblem(emblem)
-                .unique_num(unique_num)
+                .uniqueNum(unique_num)
                 .id(id)
                 .name(name)
                 .build();
         //when
         Long test_id = team.getId();
         String test_name = team.getName();
-        String test_unique_num = team.getUnique_num();
+        String test_unique_num = team.getUniqueNum();
         String test_emblem = team.getEmblem();
         //then
         Assertions.assertAll(
