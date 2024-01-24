@@ -10,13 +10,11 @@ import sejong.team.common.client.UserServiceClient;
 import sejong.team.common.client.dto.SizeUserTeamResponse;
 import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
-import sejong.team.global.MethodUtils;
 import sejong.team.repository.TeamRepository;
 import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @RequiredArgsConstructor
