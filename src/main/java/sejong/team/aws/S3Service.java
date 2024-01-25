@@ -5,8 +5,13 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.UUID;
+
+import static java.util.UUID.*;
 
 @Service
 public class S3Service {
@@ -20,6 +25,17 @@ public class S3Service {
 
     public void uploadFile(String fileName, InputStream inputStream, ObjectMetadata metadata) {
         s3client.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata));
+    }
+    public String uploadMultipartFile(MultipartFile multipartFile) throws IOException {
+        String fileName = randomUUID().toString() + ".jpg";
+        InputStream inputStream = multipartFile.getInputStream();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(multipartFile.getSize());
+        metadata.setContentType(multipartFile.getContentType());
+
+        uploadFile(fileName, inputStream, metadata);
+        return getFileUrl(fileName);
     }
 
     public String getFileUrl(String fileName) {

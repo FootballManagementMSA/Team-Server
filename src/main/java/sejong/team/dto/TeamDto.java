@@ -2,10 +2,11 @@ package sejong.team.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 
-@Data
+@Getter
 @Builder
 public class TeamDto {
     private String name;
