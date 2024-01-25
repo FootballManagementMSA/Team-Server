@@ -47,6 +47,15 @@ dependencies {
 
     //open feign
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+    // FCM
+    implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
+    implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.12.0'
+
+    //Java 8의 날짜/시간 API를 지원을 위한 추가 모듈
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.16.1'
+
+
+
 }
 
 dependencyManagement {
