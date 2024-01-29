@@ -1,4 +1,4 @@
-package sejong.team.common.client.dto;
+package sejong.team.client.dto;
 
 import lombok.Getter;
 
