@@ -12,10 +12,13 @@ import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
 import sejong.team.repository.TeamRepository;
 import sejong.team.service.res.CreateTeamResponseVO;
+import sejong.team.service.res.SearchTeamResponseDto;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -53,6 +56,20 @@ public class TeamService {
                 .sizeOfUsers(sizeUserTeamResponseResponseEntity.getBody().getSize())
                 .createdAt(findTeam.getCreated_at())
                 .build();
+    }
+
+    public List<SearchTeamResponseDto> findAllTeams(){
+        List<Team> teams = teamRepository.findAll();
+
+        List<SearchTeamResponseDto> responseDtos = teams.stream()
+                .map(team -> SearchTeamResponseDto.builder()
+                        .name(team.getName())
+                        .uniqueNum(team.getUniqueNum())
+                        .emblem(team.getEmblem())
+                        .build())
+                .collect(Collectors.toList());
+        return responseDtos;
+
     }
     /*
     public List<SearchTeamInfoResponseDto> searchTeamInfoByNameOrCode(SearchTeamInfoRequestDto requestDto) {
