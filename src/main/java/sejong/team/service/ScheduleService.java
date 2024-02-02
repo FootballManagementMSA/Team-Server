@@ -1,5 +1,6 @@
 package sejong.team.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import sejong.team.domain.Schedule;
 import sejong.team.domain.Team;
 import sejong.team.fcm.FCMService;
 import sejong.team.fcm.ScheduleNotificationDto;
+import sejong.team.global.MessageUtils;
 import sejong.team.repository.ScheduleRepository;
 import sejong.team.repository.TeamRepository;
 import sejong.team.service.req.CreateScheduleRequestDto;
@@ -34,8 +36,11 @@ public class ScheduleService {
                 .accept(false)
                 .build();
 
-        Team homeTeam = teamRepository.findById(homeTeamId).get();
-        Team awayTeam = teamRepository.findById(createScheduleRequestDto.getAwayTeamId()).get();
+        Team homeTeam = teamRepository.findById(homeTeamId)
+                .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
+
+        Team awayTeam = teamRepository.findById(createScheduleRequestDto.getAwayTeamId())
+                .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
 
         ScheduleNotificationDto scheduleNotificationDto = ScheduleNotificationDto.builder()
                 .title(createScheduleRequestDto.getTitle())
@@ -57,10 +62,14 @@ public class ScheduleService {
         scheduleRepository.save(schedule);
     }
     public ViewScheduleResponseDto viewSchedule(Long scheduleId){
-        Schedule schedule = scheduleRepository.findById(scheduleId).get();
+        Schedule schedule = scheduleRepository.findById(scheduleId)
+                .orElseThrow(() -> new EntityNotFoundException(MessageUtils.SCHEDULE_NOT_FOUND));
 
-        Team homeTeam = teamRepository.findById(schedule.getHomeTeamId()).get();
-        Team awayTeam = teamRepository.findById(schedule.getAwayTeamId()).get();
+        Team homeTeam = teamRepository.findById(schedule.getHomeTeamId())
+                .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
+
+        Team awayTeam = teamRepository.findById(schedule.getAwayTeamId())
+                .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
 
         ViewScheduleResponseDto viewScheduleResponseDto = ViewScheduleResponseDto.builder()
                 .title(schedule.getTitle())
