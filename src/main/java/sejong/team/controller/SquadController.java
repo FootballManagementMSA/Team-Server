@@ -1,12 +1,10 @@
 package sejong.team.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sejong.team.global.DataResponse;
 import sejong.team.service.SquadService;
+import sejong.team.service.req.UserInSquadSaveRequestDto;
 import sejong.team.service.res.UserInSquadResponseDto;
 
 import java.util.List;
@@ -21,4 +19,12 @@ public class SquadController {
                                                                    @PathVariable(name = "teamId")Long teamId){
         return new DataResponse(squadService.getTeamSquad(scheduleId,teamId));
     }
+    @PostMapping("/schedules/{scheduleId}/teams/{teamId}/squad")
+    public DataResponse saveTeamSquad(@PathVariable(name = "scheduleId")Long scheduleId,
+                                      @PathVariable(name = "teamId")Long teamId,
+                                      @RequestBody UserInSquadSaveRequestDto users) {
+        squadService.saveTeamSquad(scheduleId,teamId,users);
+        return new DataResponse();
+    }
+
 }
