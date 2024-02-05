@@ -1,5 +1,6 @@
 package sejong.team.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sejong.team.common.client.UserServiceClient;
@@ -10,6 +11,7 @@ import sejong.team.global.MessageUtils;
 import sejong.team.global.SquadNotFoundException;
 import sejong.team.repository.SquadRepository;
 import sejong.team.repository.UserSquadRepository;
+import sejong.team.service.req.UserInSquadSaveRequestDto;
 import sejong.team.service.res.UserInSquadResponseDto;
 
 import java.util.List;
@@ -46,6 +48,39 @@ public class SquadService {
                     .yCoordinate(userSquad.getYCoordinate())
                     .build();
         }).collect(Collectors.toList());
+
+    }
+
+    /**
+     *
+     * @param scheduleId
+     * @param teamId
+     * @param userInSquadSaveRequestDto
+     * 스쿼드 조회 후 User-Squad 테이블을 스쿼드 ID를 통해 조회합니다.
+     * 이후 요청으로 들어온 각 선수들에 대해 updateCount 변수를 통해 판단합니다.
+     * 이미 등록된 선수(updateCount != 0) -> 업데이트
+     * 등록되지 않은 선수(updateCount == 0) -> 인서트
+     */
+    @Transactional
+    public void saveTeamSquad(Long scheduleId, Long teamId,
+                              UserInSquadSaveRequestDto userInSquadSaveRequestDto){
+        Squad squad = squadRepository.findSquadByScheduleIdAndTeamId(scheduleId, teamId)
+                .orElseThrow(() -> new SquadNotFoundException(MessageUtils.NOT_EXIST_SQUAD));
+
+        userInSquadSaveRequestDto.getUsers().forEach(dto -> {
+            int updatedCount = userSquadRepository.updateUserSquadCoordinates(
+                    dto.getUserId(), squad.getId(), dto.getX(), dto.getY());
+
+            if (updatedCount == 0) {
+                UserSquad newUserSquad = UserSquad.builder()
+                        .userId(dto.getUserId())
+                        .squadId(squad.getId())
+                        .xCoordinate(dto.getX())
+                        .yCoordinate(dto.getY())
+                        .build();
+                userSquadRepository.save(newUserSquad);
+            }
+        });
 
     }
 }
