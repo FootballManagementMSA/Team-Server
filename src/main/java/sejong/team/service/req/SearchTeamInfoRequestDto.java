@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 @Builder
 public class SearchTeamInfoRequestDto {
-    private String searchCond;
+    private String search;
     public static SearchTeamInfoRequestDto of(String searchParam){
         return SearchTeamInfoRequestDto.builder()
-                .searchCond(searchParam)
+                .search(searchParam)
                 .build();
     }
 }
