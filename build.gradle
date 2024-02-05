@@ -17,6 +17,7 @@ repositories {
 }
 
 ext {
+    jacksonVersion = '2.16.1'
     set('springCloudVersion', "2022.0.0")
 }
 
@@ -47,6 +48,11 @@ dependencies {
 
     //open feign
     implementation "org.springframework.cloud:spring-cloud-starter-openfeign"
+
+    //데이터 바인딩 에러로 인한 jackson 오버라이딩
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jacksonVersion
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jacksonVersion
 }
 
 dependencyManagement {
