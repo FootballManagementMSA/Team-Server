@@ -7,9 +7,11 @@ import sejong.team.global.BaseResponse;
 import sejong.team.global.DataResponse;
 import sejong.team.service.TeamService;
 import sejong.team.service.res.CreateTeamResponseVO;
+import sejong.team.service.res.SearchTeamResponseDto;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +25,10 @@ public class TeamController {
     @PostMapping("/teams")
     public DataResponse<CreateTeamResponseVO> createTeam(@ModelAttribute TeamDto teamDto) throws IOException {
         return new DataResponse<>(teamService.createTeam(teamDto));
+    }
+    @GetMapping("/teams")
+    public DataResponse<List<SearchTeamResponseDto>> findAllTeams(){
+        return new DataResponse<>(teamService.findAllTeams());
     }
 
 }
