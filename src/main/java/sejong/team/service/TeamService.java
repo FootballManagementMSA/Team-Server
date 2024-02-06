@@ -1,6 +1,5 @@
 package sejong.team.service;
 
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,9 @@ import sejong.team.common.client.dto.SizeUserTeamResponse;
 import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
 import sejong.team.repository.TeamRepository;
+import sejong.team.service.req.SearchTeamInfoRequestDto;
 import sejong.team.service.res.CreateTeamResponseVO;
+import sejong.team.service.res.SearchTeamInfoResponseDto;
 import sejong.team.service.res.SearchTeamResponseDto;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
 
@@ -71,12 +72,17 @@ public class TeamService {
         return responseDtos;
 
     }
-    /*
-    public List<SearchTeamInfoResponseDto> searchTeamInfoByNameOrCode(SearchTeamInfoRequestDto requestDto) {
-        List<Team> allTeamByCond = teamRepository.findAllByCondition(requestDto.getSearchCond());
-        allTeamByCond.stream()
-        allTeamByCond.stream().map(team -> SearchTeamInfoResponseDto.of(
-            team.getId(),team.getName(),team.getEmblem(),,team.getUnique_num()
-        ))
-    }*/
+
+    public List<SearchTeamInfoResponseDto> searchTeamInfo(SearchTeamInfoRequestDto requestDto) {
+        List<Team> searchTeam = teamRepository.findAllByCondition(requestDto.getSearch());
+        return searchTeam.stream().map(
+                team ->
+                        SearchTeamInfoResponseDto.builder()
+                                .totalMemberCnt(userServiceClient.countUsersInTeam(team.getId()).getBody().getSize())
+                                .teamName(team.getName())
+                                .teamId(team.getId())
+                                .uniqueNum(team.getUniqueNum())
+                                .emblem(team.getEmblem())
+                                .build()).collect(Collectors.toList());
+    }
 }

@@ -9,7 +9,7 @@ import sejong.team.common.client.dto.UserSquadResponse;
 
 @FeignClient(name = "user-service")
 public interface UserServiceClient {
-    @GetMapping("/api/user-service/users/teams/{teamId}")
+    @GetMapping("/api/user-service/users/teams/{teamId}/size")
     ResponseEntity<SizeUserTeamResponse> countUsersInTeam(@PathVariable(value = "teamId") Long teamId);
 
     @GetMapping("/api/user-service/users/{userId}/squad")
