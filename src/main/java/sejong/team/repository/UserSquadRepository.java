@@ -20,4 +20,10 @@ public interface UserSquadRepository extends JpaRepository<UserSquad,Long> {
                                    @Param("squadId") Long squadId,
                                    @Param("xCoordinate") Double xCoordinate,
                                    @Param("yCoordinate") Double yCoordinate);
+
+    /**
+     * 벌크연산 - squad_id가 squadIds 리스트에 있는 ID 중 하나라도 일치하는 모든 UserSquad 행을 삭제
+     * @param squadIds
+     */
+    void deleteBySquadIdIn(List<Long> squadIds);
 }
