@@ -5,10 +5,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sejong.team.domain.Squad;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface SquadRepository extends JpaRepository<Squad,Long> {
     @Query("SELECT s FROM squad_tb s WHERE s.scheduleId = :scheduleId AND s.teamId = :teamId")
     Optional<Squad> findSquadByScheduleIdAndTeamId(@Param("scheduleId") Long scheduleId,
                                                    @Param("teamId") Long teamId);
+
+    List<Squad> findByScheduleId(Long scheduleId);
+    void deleteByScheduleId(Long scheduleId);
+
 }
