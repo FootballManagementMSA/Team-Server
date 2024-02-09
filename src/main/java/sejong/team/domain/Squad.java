@@ -22,6 +22,4 @@ public class Squad {
     private Long scheduleId;
     @Column(name = "team_id")
     private Long teamId;
-    @Column(name = "user_squad_id")
-    private Long userSquadId;
 }
