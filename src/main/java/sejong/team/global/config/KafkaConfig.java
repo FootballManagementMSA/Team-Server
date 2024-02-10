@@ -1,7 +1,5 @@
 package sejong.team.global.config;
 
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,10 +7,10 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
+import sejong.team.global.kafka.CommonJsonSerializer;
 import sejong.team.service.req.ApplyTeamRequestDto;
+import sejong.team.service.req.ConfirmApplicationRequestDto;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
@@ -20,17 +18,27 @@ import java.util.Map;
 public class KafkaConfig {
     @Value("${kafka.BOOTSTRAP_SERVERS_CONFIG}")
     private String BOOTSTRAP_SERVERS_CONFIG;
+
     @Bean
-    public ProducerFactory<String, ApplyTeamRequestDto> producerFactory() {
-        Map<String, Object> config = new HashMap<>();
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS_CONFIG);
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-        return new DefaultKafkaProducerFactory<>(config);
+    public Map<String, Object> TeamProducerConfig() {
+        return CommonJsonSerializer.getStringObjectMap(BOOTSTRAP_SERVERS_CONFIG);
     }
 
     @Bean
-    public KafkaTemplate<String, ApplyTeamRequestDto> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
+    public ProducerFactory<String, ApplyTeamRequestDto> applyTeamRequestDtoProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(TeamProducerConfig());
+    }
+    @Bean
+    public ProducerFactory<String, ConfirmApplicationRequestDto> confirmApplicationRequestDtoProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(TeamProducerConfig());
+    }
+
+    @Bean
+    public KafkaTemplate<String, ApplyTeamRequestDto> applyTeamkafkaTemplate() {
+        return new KafkaTemplate<>(applyTeamRequestDtoProducerFactory());
+    }
+    @Bean
+    public KafkaTemplate<String, ConfirmApplicationRequestDto> confirmApplicantkafkaTemplate() {
+        return new KafkaTemplate<>(confirmApplicationRequestDtoProducerFactory());
     }
 }

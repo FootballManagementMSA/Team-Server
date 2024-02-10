@@ -11,6 +11,7 @@ import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
 import sejong.team.repository.TeamRepository;
 import sejong.team.service.req.ApplyTeamRequestDto;
+import sejong.team.service.req.ConfirmApplicationRequestDto;
 import sejong.team.service.req.SearchTeamInfoRequestDto;
 import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.SearchTeamInfoResponseDto;
@@ -91,5 +92,9 @@ public class TeamService {
 
     public void applyTeam(ApplyTeamRequestDto requestDto){
         teamKafkaProducer.applyTeam(requestDto);
+    }
+
+    public void confirmApplicant(ConfirmApplicationRequestDto requestDto){
+        teamKafkaProducer.confirmApplicant(requestDto);
     }
 }
