@@ -1,5 +1,4 @@
 name: team-server CI/CD
-
 on:
   push:
     branches: [ dev ]
@@ -10,48 +9,45 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 17
-      uses: actions/setup-java@v2
-      with:
-        java-version: '17'
-        distribution: 'adopt'
+      - uses: actions/checkout@v2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+      - name: Set YML
+        run: |
+          mkdir ./src/main/resources 
+          cd ./src/main/resources # resources 폴더로 이동
+          touch ./application.yml # application.yml 생성
+          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
+      - name: Set YML PRODUCTION
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_PRODUCTION_YML }}" | base64 --decode > src/main/resources/application-production.yml
+          find src
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-    - name: Set YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
 
-    - name: Set YML PRODUCTION
-      run: |
-        echo "${{ secrets.APPLICATION_PRODUCTION_YML }}" > src/main/resources/application-production.yml
-        find src
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_TOKEN}}
+      - name: build and release to DockerHub
+        env:
+          NAME: bes99 # 계정 명
+          REPO: team-server # 레포 이름
+        run: |
+          docker build -t $REPO .
+          docker tag $REPO:latest $NAME/$REPO:latest
+          docker push $NAME/$REPO:latest
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: Build with Gradle
-      run: ./gradlew clean build -x test
-      
-    - name: Login to DockerHub
-      uses: docker/login-action@v1
-      with:
-        username: ${{secrets.DOCKER_USERNAME}}
-        password: ${{secrets.DOCKER_TOKEN}}
-
-    - name: build and release to DockerHub 
-      env:
-        NAME: bes99 # 계정 명
-        REPO: team-server # 레포 이름
-      run: |
-        docker build -t $REPO .
-        docker tag $REPO:latest $NAME/$REPO:latest
-        docker push $NAME/$REPO:latest
-        
   deploy:
     needs: build
     name: Deploy
@@ -59,6 +55,6 @@ jobs:
     steps:
       - name: Docker run
         run: |
-              sudo docker ps -q --filter "name=team-server" | grep -q . && sudo docker stop "team-server" && sudo docker rmi  "bes99/team-server"
-              sudo docker pull bes99/team-server
-              sudo docker run -d --name team-server --rm -p 8081:8081 bes99/team-server
+          sudo docker ps -q --filter "name=team-server" | grep -q . && sudo docker stop "team-server" && sudo docker rmi  "bes99/team-server"
+          sudo docker pull bes99/team-server
+          sudo docker run -d --name team-server --rm -p 8081:8081 bes99/team-server
