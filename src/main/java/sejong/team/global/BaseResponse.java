@@ -1,8 +1,10 @@
 package sejong.team.global;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseResponse {
     private Integer status;
     private String code;
@@ -10,7 +12,6 @@ public class BaseResponse {
 
     public BaseResponse(){
         this.message  = MessageUtils.SUCCESS;
-        this.code="";
         this.status = 200;
     }
     public BaseResponse(Integer status, String code, String message){
