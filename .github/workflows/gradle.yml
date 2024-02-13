@@ -23,11 +23,7 @@ jobs:
           cd ./src/main/resources # resources 폴더로 이동
           touch ./application.yml # application.yml 생성
           echo "${{ secrets.APPLICATION_YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
-      - name: Set YML PRODUCTION
-        run: |
-          mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_PRODUCTION_YML }}" | base64 --decode > src/main/resources/application-production.yml
-          find src
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
