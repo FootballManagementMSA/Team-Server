@@ -38,7 +38,9 @@ public class TeamController {
     public DataResponse<List<SearchTeamResponseDto>> findAllTeams() {
         return new DataResponse<>(teamService.findAllTeams());
     }
-
+    /**
+     * 팀 검색api
+     */
     @GetMapping("/team/search")
     public DataResponse<List<SearchTeamInfoResponseDto>> searchTeamInfo(@RequestParam(name = "search") String search) {
         List<SearchTeamInfoResponseDto> responseDtos = teamService.searchTeamInfo(SearchTeamInfoRequestDto.builder()
@@ -47,22 +49,30 @@ public class TeamController {
         return new DataResponse<>(responseDtos);
     }
 
+    /**
+     * 팀 가입 신청api
+     */
     @PostMapping("/team/{teamId}/apply")
-    public void applyTeam(@RequestBody ApplyTeamRequest request, @PathVariable Long teamId) {
+    public DataResponse applyTeam(@RequestBody ApplyTeamRequest request, @PathVariable Long teamId) {
         teamService.applyTeam(ApplyTeamRequestDto.builder()
                 .userId(request.getUserId())
                 .teamId(teamId)
                 .introduce(request.getIntroduce())
                 .build());
+        return new DataResponse();
     }
 
+    /**
+     * 팀 가입신청 승인 또는 거절 api
+     */
     @PostMapping("/team/{teamId}/apply/confirm")
-    public void confirmApplicant(@PathVariable Long teamId,@RequestBody ConfirmApplicantRequest request){
+    public DataResponse confirmApplicant(@PathVariable Long teamId,@RequestBody ConfirmApplicantRequest request){
         teamService.confirmApplicant(ConfirmApplicationRequestDto.builder()
                 .approve(request.isApprove())
                 .userId(request.getUserId())
                 .teamId(teamId)
                 .build());
+        return new DataResponse();
     }
 
 
