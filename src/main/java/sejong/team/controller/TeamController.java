@@ -3,10 +3,12 @@ package sejong.team.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sejong.team.controller.req.ApplyTeamRequest;
+import sejong.team.controller.req.ConfirmApplicantRequest;
 import sejong.team.dto.TeamDto;
 import sejong.team.global.DataResponse;
 import sejong.team.service.TeamService;
 import sejong.team.service.req.ApplyTeamRequestDto;
+import sejong.team.service.req.ConfirmApplicationRequestDto;
 import sejong.team.service.req.SearchTeamInfoRequestDto;
 import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.SearchTeamInfoResponseDto;
@@ -51,6 +53,15 @@ public class TeamController {
                 .userId(request.getUserId())
                 .teamId(teamId)
                 .introduce(request.getIntroduce())
+                .build());
+    }
+
+    @PostMapping("/team/{teamId}/apply/confirm")
+    public void confirmApplicant(@PathVariable Long teamId,@RequestBody ConfirmApplicantRequest request){
+        teamService.confirmApplicant(ConfirmApplicationRequestDto.builder()
+                .approve(request.isApprove())
+                .userId(request.getUserId())
+                .teamId(teamId)
                 .build());
     }
 
