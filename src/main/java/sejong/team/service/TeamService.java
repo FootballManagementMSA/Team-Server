@@ -10,11 +10,13 @@ import sejong.team.common.client.dto.SizeUserTeamResponse;
 import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
 import sejong.team.repository.TeamRepository;
+import sejong.team.service.req.ApplyTeamRequestDto;
 import sejong.team.service.req.SearchTeamInfoRequestDto;
 import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.SearchTeamInfoResponseDto;
 import sejong.team.service.res.SearchTeamResponseDto;
 import sejong.team.service.res.TeamBaseInfoResponseDto;
+import sejong.team.service.team.TeamKafkaProducer;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +29,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final S3Service s3Service;
     private final UserServiceClient userServiceClient;
+    private final TeamKafkaProducer teamKafkaProducer;
     @Transactional
     public CreateTeamResponseVO createTeam(TeamDto teamDto) throws IOException {
         String fileUrl = s3Service.uploadMultipartFile(teamDto.getEmblem());
@@ -84,5 +87,9 @@ public class TeamService {
                                 .uniqueNum(team.getUniqueNum())
                                 .emblem(team.getEmblem())
                                 .build()).collect(Collectors.toList());
+    }
+
+    public void applyTeam(ApplyTeamRequestDto requestDto){
+        teamKafkaProducer.applyTeam(requestDto);
     }
 }

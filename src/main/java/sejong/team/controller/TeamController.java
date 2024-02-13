@@ -2,9 +2,11 @@ package sejong.team.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import sejong.team.controller.req.ApplyTeamRequest;
 import sejong.team.dto.TeamDto;
 import sejong.team.global.DataResponse;
 import sejong.team.service.TeamService;
+import sejong.team.service.req.ApplyTeamRequestDto;
 import sejong.team.service.req.SearchTeamInfoRequestDto;
 import sejong.team.service.res.CreateTeamResponseVO;
 import sejong.team.service.res.SearchTeamInfoResponseDto;
@@ -42,5 +44,15 @@ public class TeamController {
                 .build());
         return new DataResponse<>(responseDtos);
     }
+
+    @PostMapping("/team/{teamId}/apply")
+    public void applyTeam(@RequestBody ApplyTeamRequest request, @PathVariable Long teamId) {
+        teamService.applyTeam(ApplyTeamRequestDto.builder()
+                .userId(request.getUserId())
+                .teamId(teamId)
+                .introduce(request.getIntroduce())
+                .build());
+    }
+
 
 }

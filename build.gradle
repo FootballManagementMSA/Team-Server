@@ -60,6 +60,9 @@ dependencies {
 
     // Java 8의 날짜/시간 API 지원을 위한 추가 모듈
     implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.16.1'
+
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {

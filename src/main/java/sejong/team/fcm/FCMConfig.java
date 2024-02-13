@@ -12,12 +12,12 @@ import java.io.IOException;
 
 @Configuration
 public class FCMConfig {
-    @Value("${fcm.service-account-file}")
+/*    @Value("${fcm.service-account-file}")
     private String serviceAccountFilePath;
 
-    /**
+    *//**
      * 토픽 필요 시 설정
-     */
+     *//*
     @Value("${fcm.topic-name}")
     private String topicName;
     @Value("${fcm.project-id}")
@@ -31,5 +31,5 @@ public class FCMConfig {
                 .build();
 
         FirebaseApp.initializeApp(options);
-    }
+    }*/
 }
