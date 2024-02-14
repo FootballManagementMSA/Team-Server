@@ -1,9 +1,9 @@
 name: team-server CI/CD
 on:
   push:
-    branches: [ feature/fix-script ]
+    branches: [ dev ]
   pull_request:
-    branches: [ feature/fix-script ]
+    branches: [ dev ]
   workflow_dispatch: # 테스트용 수동 실행 이벤트 추가
 
 
