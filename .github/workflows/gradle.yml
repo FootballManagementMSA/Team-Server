@@ -19,10 +19,9 @@ jobs:
           distribution: 'adopt'
       - name: Set YML
         run: |
-          mkdir ./src/main/resources 
-          cd ./src/main/resources # resources 폴더로 이동
-          touch ./application.yml # application.yml 생성
-          echo "${{ secrets.APPLICATION_YML }}" > ./application.yml # github actions에서 설정한 값을 application.yml 파일에 쓰기
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+        shell: bash
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
@@ -51,6 +50,6 @@ jobs:
     steps:
       - name: Docker run
         run: |
-          sudo docker ps -q --filter "name=team-server" | grep -q . && sudo docker stop "team-server" && sudo docker rmi  "bes99/team-server"
+          sudo docker ps -q --filter "name=team-server" | grep -q . && sudo docker stop "team-server" && sudo docker rmi -f "bes99/team-server"
           sudo docker pull bes99/team-server
           sudo docker run -d --name team-server --rm -p 8081:8081 bes99/team-server
