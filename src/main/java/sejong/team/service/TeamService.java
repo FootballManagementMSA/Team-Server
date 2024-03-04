@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import sejong.team.aws.S3Service;
 import sejong.team.common.client.UserServiceClient;
+import sejong.team.common.client.dto.IncludeOwnerInTeamDto;
 import sejong.team.common.client.dto.SizeUserTeamResponse;
 import sejong.team.domain.Team;
 import sejong.team.dto.TeamDto;
@@ -32,7 +33,7 @@ public class TeamService {
     private final UserServiceClient userServiceClient;
     private final TeamKafkaProducer teamKafkaProducer;
     @Transactional
-    public CreateTeamResponseVO createTeam(TeamDto teamDto) throws IOException {
+    public CreateTeamResponseVO createTeam(TeamDto teamDto,String token) throws IOException {
         String fileUrl = s3Service.uploadMultipartFile(teamDto.getEmblem());
 
         // 중복 로직 반영 x
@@ -43,7 +44,14 @@ public class TeamService {
                 .emblem(fileUrl)
                 .uniqueNum(uniqueNum)
                 .build();
-        teamRepository.save(team);
+
+        team = teamRepository.save(team);
+
+        IncludeOwnerInTeamDto includeOwnerInTeamDto = IncludeOwnerInTeamDto.builder()
+                .teamId(team.getId())
+                .token(token)
+                .build();
+        userServiceClient.IncludeOwnerInTeam(includeOwnerInTeamDto);
 
         return CreateTeamResponseVO.builder()
                 .uniqueNumber(uniqueNum)

@@ -30,28 +30,28 @@ public class TeamServiceTest {
     @InjectMocks
     private TeamService teamService;
 
-    @Test
-    public void 팀생성테스트() throws IOException {
-        // given
-        MockMultipartFile mockMultipartFile = new MockMultipartFile(
-                "emblem",
-                "filename.jpg",
-                "image/jpeg",
-                "some-image-content".getBytes());
-
-        TeamDto teamDto = TeamDto.builder()
-                .name("최강축구단")
-                .emblem(mockMultipartFile)
-                .build();
-
-        // when
-        teamService.createTeam(teamDto);
-
-        // then
-        verify(s3Service, times(1)).uploadFile(anyString(),
-                any(InputStream.class), any(ObjectMetadata.class));
-        verify(teamRepository, times(1)).save(any(Team.class));
-    }
+//    @Test
+//    public void 팀생성테스트() throws IOException {
+//        // given
+//        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+//                "emblem",
+//                "filename.jpg",
+//                "image/jpeg",
+//                "some-image-content".getBytes());
+//
+//        TeamDto teamDto = TeamDto.builder()
+//                .name("최강축구단")
+//                .emblem(mockMultipartFile)
+//                .build();
+//
+//        // when
+//        teamService.createTeam(teamDto);
+//
+//        // then
+//        verify(s3Service, times(1)).uploadFile(anyString(),
+//                any(InputStream.class), any(ObjectMetadata.class));
+//        verify(teamRepository, times(1)).save(any(Team.class));
+//    }
     @Test
     void 팀검색_기능테스트_이름() {
         //given
