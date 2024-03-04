@@ -1,5 +1,6 @@
 package sejong.team.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import sejong.team.controller.req.ApplyTeamRequest;
@@ -30,8 +31,10 @@ public class TeamController {
     }
 
     @PostMapping("/teams")
-    public DataResponse<CreateTeamResponseVO> createTeam(@ModelAttribute TeamDto teamDto) throws IOException {
-        return new DataResponse<>(teamService.createTeam(teamDto));
+    public DataResponse<CreateTeamResponseVO> createTeam(@ModelAttribute TeamDto teamDto,
+                                                         HttpServletRequest request) throws IOException {
+        String token = request.getHeader("Authorization").substring(7);
+        return new DataResponse<>(teamService.createTeam(teamDto,token));
     }
 
     @GetMapping("/teams")
