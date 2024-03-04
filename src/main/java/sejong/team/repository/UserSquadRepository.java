@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import sejong.team.domain.UserSquad;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface UserSquadRepository extends JpaRepository<UserSquad,Long> {
@@ -26,4 +27,6 @@ public interface UserSquadRepository extends JpaRepository<UserSquad,Long> {
      * @param squadIds
      */
     void deleteBySquadIdIn(List<Long> squadIds);
+
+    void deleteAllByUserId(Long userId);
 }

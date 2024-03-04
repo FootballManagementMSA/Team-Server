@@ -1,7 +1,9 @@
 package sejong.team.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sejong.team.global.BaseResponse;
 import sejong.team.global.DataResponse;
 import sejong.team.service.SquadService;
 import sejong.team.service.req.UserInSquadSaveRequestDto;
@@ -27,4 +29,10 @@ public class SquadController {
         return new DataResponse();
     }
 
+    @DeleteMapping("/{userId}/squad")
+    public ResponseEntity<Void> deleteUserSquad(@PathVariable Long userId) {
+        squadService.deleteUserSqaud(userId);
+
+        return ResponseEntity.ok().build();
+    }
 }

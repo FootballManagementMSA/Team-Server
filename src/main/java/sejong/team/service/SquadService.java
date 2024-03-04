@@ -1,5 +1,6 @@
 package sejong.team.service;
 
+import com.google.api.gax.rpc.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -82,5 +83,10 @@ public class SquadService {
             }
         });
 
+    }
+
+    @Transactional
+    public void deleteUserSqaud(Long userId) {
+        userSquadRepository.deleteAllByUserId(userId);
     }
 }
