@@ -18,6 +18,6 @@ public interface UserServiceClient {
 
     @GetMapping("/api/user-service/users/{userId}/squad")
     ResponseEntity<UserSquadResponse> getUserInfoInSquad(@PathVariable(name = "userId") Long userId);
-    @PostMapping("/users/teams/")
+    @PostMapping("/api/user-service/users/teams/")
     DataResponse IncludeOwnerInTeam(@RequestBody IncludeOwnerInTeamDto includeOwnerInTeamDto);
 }
