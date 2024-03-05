@@ -87,6 +87,6 @@ public class SquadService {
 
     @Transactional
     public void deleteUserSqaud(Long userId) {
-        userSquadRepository.deleteAllByUserId(userId);
+        userSquadRepository.deleteAllByUserIds(userId);
     }
 }
