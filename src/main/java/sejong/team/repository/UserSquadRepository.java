@@ -28,5 +28,7 @@ public interface UserSquadRepository extends JpaRepository<UserSquad,Long> {
      */
     void deleteBySquadIdIn(List<Long> squadIds);
 
-    void deleteAllByUserId(Long userId);
+    @Modifying
+    @Query("DELETE FROM user_squad_tb us WHERE us.userId = :userId")
+    void deleteAllByUserIds(Long userId);
 }
