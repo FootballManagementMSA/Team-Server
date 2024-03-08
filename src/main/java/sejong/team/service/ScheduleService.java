@@ -1,9 +1,12 @@
 package sejong.team.service;
 
+import com.google.api.gax.rpc.NotFoundException;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sejong.team.common.client.dto.ScheduleInfoDto;
 import sejong.team.domain.Schedule;
 import sejong.team.domain.Team;
 import sejong.team.fcm.FCMService;
@@ -14,12 +17,21 @@ import sejong.team.repository.TeamRepository;
 import sejong.team.service.req.CreateScheduleRequestDto;
 import sejong.team.service.res.ViewScheduleResponseDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static sejong.team.domain.QSchedule.schedule;
+import static sejong.team.domain.QSquad.squad;
+import static sejong.team.domain.QUserSquad.userSquad;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final TeamRepository teamRepository;
     private final FCMService fcmService;
+    private final JPAQueryFactory queryFactory;
+
     @Transactional
     public void createSchedule(Long homeTeamId,
                                CreateScheduleRequestDto createScheduleRequestDto){
@@ -97,5 +109,46 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId){
         scheduleRepository.deleteById(scheduleId);
+    }
+
+    public List<ScheduleInfoDto> getScheduleInfo(Long userId) {
+        List<Schedule> results = queryFactory
+                .select(schedule)
+                .from(userSquad)
+                .join(squad)
+                .on(userSquad.squadId.eq(squad.id))
+                .join(schedule)
+                .on(squad.scheduleId.eq(schedule.id))
+                .where(userSquad.userId.eq(userId))
+                .fetch();
+
+        List<ScheduleInfoDto> scheduleInfoDto = new ArrayList<>();
+        for(Schedule result : results) {
+            Team homeTeam = teamRepository.findById(result.getHomeTeamId())
+                    .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
+            Team awayTeam = teamRepository.findById(result.getAwayTeamId())
+                    .orElseThrow(() -> new EntityNotFoundException(MessageUtils.TEAM_NOT_FOUND));
+
+            ScheduleInfoDto scheduleInfoBuild = ScheduleInfoDto.builder()
+                    .place(result.getPlace())
+                    .startTime(result.getStartTime())
+                    .homeTeam(
+                            ScheduleInfoDto.HomeTeam.builder()
+                                    .name(homeTeam.getName())
+                                    .emblem(homeTeam.getEmblem())
+                                    .build()
+                    )
+                    .awayTeam(
+                            ScheduleInfoDto.AwayTeam.builder()
+                                    .name(awayTeam.getName())
+                                    .emblem(awayTeam.getEmblem())
+                                    .build()
+                    )
+                    .build();
+
+            scheduleInfoDto.add(scheduleInfoBuild);
+        }
+
+        return scheduleInfoDto;
     }
 }
