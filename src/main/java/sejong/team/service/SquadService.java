@@ -3,6 +3,8 @@ package sejong.team.service;
 import com.google.api.gax.rpc.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaHandler;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import sejong.team.common.client.UserServiceClient;
 import sejong.team.common.client.dto.UserSquadResponse;
@@ -86,6 +88,7 @@ public class SquadService {
     }
 
     @Transactional
+    @KafkaListener(topics = "user", groupId = "group_2")
     public void deleteUserSqaud(Long userId) {
         userSquadRepository.deleteAllByUserIds(userId);
     }
