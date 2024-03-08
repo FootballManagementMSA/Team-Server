@@ -31,13 +31,13 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Void> deleteUserSquadConsumerFactory() {
+    public ConsumerFactory<String, Long> deleteUserSquadConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(ConsumerConfigs());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Void> deleteUserSquadListener() {
-        ConcurrentKafkaListenerContainerFactory<String, Void> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, Long> deleteUserSquadListener() {
+        ConcurrentKafkaListenerContainerFactory<String, Long> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(deleteUserSquadConsumerFactory());
         return factory;
