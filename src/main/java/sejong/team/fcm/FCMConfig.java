@@ -6,18 +6,18 @@ import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FCMConfig {
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        FileInputStream serviceAccountFile = new FileInputStream("src/main/resources/firebase/firebase_service_key.json");
-        FirebaseOptions options = FirebaseOptions
-                .builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccountFile))
+        InputStream serviceAccountStream = new ClassPathResource("firebase/firebase_service_key.json").getInputStream();
+        FirebaseOptions options = FirebaseOptions.builder()
+                .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                 .build();
         return FirebaseApp.initializeApp(options);
     }
