@@ -48,7 +48,6 @@ public class ScheduleServiceTest {
                 .awayTeamId(2L)
                 .longitude(127.1234)
                 .latitude(37.5678)
-                .fcmToken("test_token")
                 .build();
 
         Team mockHomeTeam = new Team();
@@ -60,8 +59,6 @@ public class ScheduleServiceTest {
         scheduleService.createSchedule(homeTeamId, createScheduleRequestDto);
 
         verify(scheduleRepository).save(any(Schedule.class));
-        verify(fcmService).sendNotificationToToken(eq(createScheduleRequestDto.getFcmToken()),
-                any(ScheduleNotificationDto.class));
     }
 
     @Test
