@@ -11,10 +11,7 @@ import sejong.team.service.TeamService;
 import sejong.team.service.req.ApplyTeamRequestDto;
 import sejong.team.service.req.ConfirmApplicationRequestDto;
 import sejong.team.service.req.SearchTeamInfoRequestDto;
-import sejong.team.service.res.CreateTeamResponseVO;
-import sejong.team.service.res.SearchTeamInfoResponseDto;
-import sejong.team.service.res.SearchTeamResponseDto;
-import sejong.team.service.res.TeamBaseInfoResponseDto;
+import sejong.team.service.res.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,6 +74,9 @@ public class TeamController {
                 .build());
         return new DataResponse();
     }
-
+    @GetMapping("/users/{userId}/teams")
+    public DataResponse<List<UserTeamsInfo>> findUserTeams(@PathVariable Long userId){
+        return new DataResponse(teamService.findUserTeams(userId));
+    }
 
 }
