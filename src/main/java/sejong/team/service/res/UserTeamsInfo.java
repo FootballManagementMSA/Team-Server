@@ -7,11 +7,12 @@ import java.time.LocalDateTime;
 
 @Builder
 @Getter
-public class TeamBaseInfoResponseDto {
+public class UserTeamsInfo {
+    private String role;
+    private String introduce;
     private String teamName;
     private String unique_num;
     private String teamEmblem;
     private LocalDateTime createdAt;
     private Integer sizeOfUsers;
-
 }
