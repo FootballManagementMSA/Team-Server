@@ -3,33 +3,26 @@ package sejong.team.fcm;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import com.google.firebase.messaging.FirebaseMessaging;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 @Configuration
 public class FCMConfig {
-/*    @Value("${fcm.service-account-file}")
-    private String serviceAccountFilePath;
-
-    *//**
-     * 토픽 필요 시 설정
-     *//*
-    @Value("${fcm.topic-name}")
-    private String topicName;
-    @Value("${fcm.project-id}")
-    private String projectId;
-
-    @PostConstruct
-    public void initialize() throws IOException {
+    @Bean
+    public FirebaseApp firebaseApp() throws IOException {
+        InputStream serviceAccountStream = new ClassPathResource("firebase_service_key.json").getInputStream();
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(new ClassPathResource(serviceAccountFilePath).getInputStream()))
-                .setProjectId(projectId)
+                .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                 .build();
-
-        FirebaseApp.initializeApp(options);
-    }*/
+        return FirebaseApp.initializeApp(options);
+    }
+    @Bean
+    public FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp){
+        return FirebaseMessaging.getInstance(firebaseApp);
+    }
 }

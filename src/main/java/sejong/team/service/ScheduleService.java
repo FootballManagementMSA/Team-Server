@@ -1,11 +1,11 @@
 package sejong.team.service;
 
-import com.google.api.gax.rpc.NotFoundException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sejong.team.common.client.UserServiceClient;
 import sejong.team.common.client.dto.ScheduleInfoDto;
 import sejong.team.domain.Schedule;
 import sejong.team.domain.Team;
@@ -31,6 +31,7 @@ public class ScheduleService {
     private final TeamRepository teamRepository;
     private final FCMService fcmService;
     private final JPAQueryFactory queryFactory;
+    private final UserServiceClient userServiceClient;
 
     @Transactional
     public void createSchedule(Long homeTeamId,
@@ -70,7 +71,10 @@ public class ScheduleService {
                 .latitude(createScheduleRequestDto.getLatitude())
                 .build();
 
-        fcmService.sendNotificationToToken(createScheduleRequestDto.getFcmToken(), scheduleNotificationDto);
+        // feign을 통해 유저 서비스에서의 fcm 토큰 조회
+        String fcmToken = userServiceClient.getFcmToken(createScheduleRequestDto.getAwayTeamId());
+
+        fcmService.sendNotificationToToken(fcmToken, scheduleNotificationDto);
         scheduleRepository.save(schedule);
     }
     public ViewScheduleResponseDto viewSchedule(Long scheduleId){
