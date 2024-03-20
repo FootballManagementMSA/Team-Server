@@ -15,7 +15,7 @@ import java.io.InputStream;
 public class FCMConfig {
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        InputStream serviceAccountStream = new ClassPathResource("firebase/firebase_service_key.json").getInputStream();
+        InputStream serviceAccountStream = new ClassPathResource("firebase_service_key.json").getInputStream();
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccountStream))
                 .build();

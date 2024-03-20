@@ -31,8 +31,8 @@ jobs:
 
       - name: Create Firebase Config Directory
         run: |
-          mkdir -p $GITHUB_WORKSPACE/src/main/resources/firebase
-          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" | base64 --decode > $GITHUB_WORKSPACE/src/main/resources/firebase/firebase_service_key.json
+          mkdir -p $GITHUB_WORKSPACE/src/main/resources
+          echo "${{ secrets.FIREBASE_SERVICE_KEY }}" | base64 --decode > src/main/resources/firebase_service_key.json
         shell: bash
 
 
