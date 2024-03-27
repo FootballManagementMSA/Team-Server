@@ -9,6 +9,7 @@ public class SearchTeamInfoResponseDto {
     private Long teamId;
     private String teamName;
     private Integer totalMemberCnt;
+    private String details;
     private String uniqueNum;
     private String emblem;
     public static SearchTeamInfoResponseDto of(Long teamId,String teamName,String emblem,Integer totalMemberCnt,String uniqueNum){

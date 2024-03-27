@@ -8,5 +8,6 @@ import lombok.Getter;
 public class SearchTeamResponseDto {
     private String name;
     private String uniqueNum;
+    private String details;
     private String emblem;
 }
