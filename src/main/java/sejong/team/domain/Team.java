@@ -21,4 +21,5 @@ public class Team extends BaseTimeEntity {
     private String uniqueNum;
     @Column(nullable = true)
     private String emblem;
+    private String details;
 }

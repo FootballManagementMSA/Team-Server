@@ -45,6 +45,7 @@ public class TeamService {
                 .name(teamDto.getName())
                 .emblem(fileUrl)
                 .uniqueNum(uniqueNum)
+                .details(teamDto.getDetails())
                 .build();
 
         team = teamRepository.save(team);
@@ -80,6 +81,7 @@ public class TeamService {
                 .map(team -> SearchTeamResponseDto.builder()
                         .name(team.getName())
                         .uniqueNum(team.getUniqueNum())
+                        .details(team.getDetails())
                         .emblem(team.getEmblem())
                         .build())
                 .collect(Collectors.toList());
@@ -95,6 +97,7 @@ public class TeamService {
                                 .totalMemberCnt(userServiceClient.countUsersInTeam(team.getId()).getBody().getSize())
                                 .teamName(team.getName())
                                 .teamId(team.getId())
+                                .details(team.getDetails())
                                 .uniqueNum(team.getUniqueNum())
                                 .emblem(team.getEmblem())
                                 .build()).collect(Collectors.toList());
