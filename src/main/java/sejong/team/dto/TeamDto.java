@@ -10,5 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 public class TeamDto {
     private String name;
+    private String details;
     private MultipartFile emblem;
 }
